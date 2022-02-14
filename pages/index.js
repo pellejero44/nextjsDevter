@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import AppLayout from '../components/AppLayout';
-import { colors } from '../styles/theme';
-import Button from '../components/Button';
-import GitHub from '../components/Icons/GitHub';
-import { loginWithGitHub, _onAuthStateChanged } from '../firebase/client';
+import { useEffect, useState } from 'react'
+import Head from 'next/head'
+import AppLayout from '../components/AppLayout'
+import { colors } from '../styles/theme'
+import Button from '../components/Button'
+import GitHub from '../components/Icons/GitHub'
+import { loginWithGitHub, _onAuthStateChanged } from '../firebase/client'
 
-export default function Home() {
-  const [user, setUser] = useState(undefined);
+export default function Home () {
+  const [user, setUser] = useState(undefined)
 
   useEffect(() => {
     _onAuthStateChanged(setUser)
@@ -17,9 +17,9 @@ export default function Home() {
     loginWithGitHub()
       .then(setUser)
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err)
+      })
+  }
 
   return (
     <>
@@ -78,5 +78,5 @@ export default function Home() {
         }
       `}</style>
     </>
-  );
+  )
 }
