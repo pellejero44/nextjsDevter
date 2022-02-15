@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import AppLayout from '../components/AppLayout'
-import { colors } from '../styles/theme'
-import Button from '../components/Button'
-import GitHub from '../components/Icons/GitHub'
+import AppLayout from 'components/AppLayout'
+import { colors } from 'styles/theme'
+import Button from 'components/Button'
+import GitHub from 'components/Icons/GitHub'
 import { loginWithGitHub, _onAuthStateChanged } from '../firebase/client'
 
 export default function Home () {
@@ -67,12 +67,12 @@ export default function Home () {
           place-items: center;
         }
         h1 {
-          color: ${colors.secondary};
+          color: ${colors.primary};
           font-weight: 800;
           margin-bottom: 16px;
         }
         h2 {
-          color: ${colors.primary};
+          color: ${colors.secondary};
           font-size: 21px;
           margin: 0;
         }
