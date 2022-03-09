@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { collection, addDoc, Timestamp, getFirestore } from 'firebase/firestore';
 import {
   getAuth,
   GithubAuthProvider,
@@ -16,14 +17,16 @@ const firebaseConfig = {
   measurementId: 'G-G9QZNS9FYH',
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const mapUserFromFirebaseAuthToUser = (user) => {
-  const { displayName, email, photoURL } = user;
+  const { displayName, email, photoURL, uid } = user;
   return {
     avatar: photoURL,
     username: displayName,
     email,
+    uid,
   };
 };
 
@@ -40,4 +43,16 @@ export const loginWithGitHub = () => {
   const auth = getAuth();
   console.log(githubProvider);
   return signInWithPopup(auth, githubProvider);
+};
+
+export const addDevit = ({ avatar, content, userId, userName }) => {
+  return addDoc(collection(db, 'devits'), {
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0,
+  });
 };
