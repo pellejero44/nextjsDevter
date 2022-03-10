@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import AppLayout from 'components/AppLayout';
 import Button from 'components/Button';
 import useUser from 'hooks/useUser';
@@ -15,7 +16,7 @@ export default function ComposeTweet() {
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN);
   const user = useUser();
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleChange = (event) => {
     const { value } = event.target;

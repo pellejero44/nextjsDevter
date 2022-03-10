@@ -1,5 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { collection, addDoc, Timestamp, getFirestore } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  getFirestore,
+  getDocs,
+} from 'firebase/firestore';
 import {
   getAuth,
   GithubAuthProvider,
@@ -54,5 +60,23 @@ export const addDevit = ({ avatar, content, userId, userName }) => {
     createdAt: Timestamp.fromDate(new Date()),
     likesCount: 0,
     sharedCount: 0,
+  });
+};
+
+export const fetchLatestDevits = () => {
+  return getDocs(collection(db, 'devits')).then(({ docs }) => {
+    return docs.map((doc) => {
+      const data = doc.data();
+      const id = doc.id;
+      const { createdAt } = data;
+      const date = new Date(createdAt.seconds * 1000);
+      const normalizedCreatedAt = new Intl.DateTimeFormat('es-ES').format(date);
+
+      return {
+        ...data,
+        id,
+        createdAt: normalizedCreatedAt,
+      };
+    });
   });
 };
