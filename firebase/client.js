@@ -5,6 +5,7 @@ import {
   Timestamp,
   getFirestore,
   getDocs,
+  orderBy 
 } from 'firebase/firestore';
 import {
   getAuth,
@@ -64,18 +65,16 @@ export const addDevit = ({ avatar, content, userId, userName }) => {
 };
 
 export const fetchLatestDevits = () => {
-  return getDocs(collection(db, 'devits')).then(({ docs }) => {
+  return getDocs(collection(db, 'devits'), orderBy("createdAt", "desc")).then(({ docs }) => {
     return docs.map((doc) => {
       const data = doc.data();
       const id = doc.id;
       const { createdAt } = data;
-      const date = new Date(createdAt.seconds * 1000);
-      const normalizedCreatedAt = new Intl.DateTimeFormat('es-ES').format(date);
 
       return {
         ...data,
         id,
-        createdAt: normalizedCreatedAt,
+        createdAt: +createdAt.toDate(),
       };
     });
   });
