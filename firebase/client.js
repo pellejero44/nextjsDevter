@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   collection,
   addDoc,
   Timestamp,
   getFirestore,
   getDocs,
-  orderBy 
+  orderBy,
 } from 'firebase/firestore';
 import {
   getAuth,
@@ -65,17 +66,28 @@ export const addDevit = ({ avatar, content, userId, userName }) => {
 };
 
 export const fetchLatestDevits = () => {
-  return getDocs(collection(db, 'devits'), orderBy("createdAt", "desc")).then(({ docs }) => {
-    return docs.map((doc) => {
-      const data = doc.data();
-      const id = doc.id;
-      const { createdAt } = data;
+  return getDocs(collection(db, 'devits'), orderBy('createdAt', 'desc')).then(
+    ({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        const { createdAt } = data;
 
-      return {
-        ...data,
-        id,
-        createdAt: +createdAt.toDate(),
-      };
-    });
-  });
+        return {
+          ...data,
+          id,
+          createdAt: +createdAt.toDate(),
+        };
+      });
+    }
+  );
 };
+
+export const uploadImage = (file) => {
+  const storage = getStorage();
+  const imagesRef = ref(storage, `images/${file.name}`);
+  const task = uploadBytes(imagesRef, file);
+  return task;
+};
+
+export const downloadImage = (ref) => getDownloadURL(ref);
