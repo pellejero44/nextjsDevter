@@ -2,6 +2,9 @@ import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   collection,
+  query,
+  limit,
+  onSnapshot,
   addDoc,
   Timestamp,
   getFirestore,
@@ -65,22 +68,32 @@ export const addDevit = ({ avatar, content, img, userId, userName }) => {
   });
 };
 
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const data = doc.data();
+  const id = doc.id;
+  const { createdAt } = data;
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  };
+};
+
 export const fetchLatestDevits = () => {
   return getDocs(collection(db, 'devits'), orderBy('createdAt', 'desc')).then(
     ({ docs }) => {
-      return docs.map((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        const { createdAt } = data;
-
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        };
-      });
+      return docs.map(mapDevitFromFirebaseToDevitObject);
     }
   );
+};
+
+export const listenLatestDevits = (callback) => {
+  const q = query(collection(db, 'devits'), orderBy('createdAt', 'desc'));
+  return onSnapshot(q, ({ docs }) => {
+    const newDevits = docs.map(mapDevitFromFirebaseToDevitObject);
+    callback(newDevits);
+  });
 };
 
 export const uploadImage = (file) => {
