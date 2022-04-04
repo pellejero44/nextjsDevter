@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import AppLayout from 'components/AppLayout';
 import { colors } from 'styles/theme';
 import Button from 'components/Button';
 import GitHub from 'components/Icons/GitHub';
@@ -28,7 +27,6 @@ export default function Home() {
         <title>Devter</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <AppLayout>
         <section>
           <img src='/devter-logo.png' alt='Logo' />
           <h1>Devter</h1>
@@ -54,7 +52,6 @@ export default function Home() {
             )}
           </div>
         </section>
-      </AppLayout>
       <style jsx>{`
         img {
           width: 120px;

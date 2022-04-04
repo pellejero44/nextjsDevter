@@ -49,7 +49,6 @@ export const _onAuthStateChanged = (onChange) => {
 export const loginWithGitHub = () => {
   const githubProvider = new GithubAuthProvider();
   const auth = getAuth();
-  console.log(githubProvider);
   return signInWithPopup(auth, githubProvider);
 };
 
