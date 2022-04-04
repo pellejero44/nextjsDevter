@@ -53,10 +53,11 @@ export const loginWithGitHub = () => {
   return signInWithPopup(auth, githubProvider);
 };
 
-export const addDevit = ({ avatar, content, userId, userName }) => {
+export const addDevit = ({ avatar, content, img, userId, userName }) => {
   return addDoc(collection(db, 'devits'), {
     avatar,
     content,
+    img,
     userId,
     userName,
     createdAt: Timestamp.fromDate(new Date()),

@@ -5,6 +5,7 @@ import Button from 'components/Button';
 import useUser from 'hooks/useUser';
 import { addDevit, downloadImage, uploadImage } from '../../../firebase/client';
 import Head from 'next/head';
+import Avatar from 'components/Avatar';
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -34,7 +35,7 @@ export default function ComposeTweet() {
 
   useEffect(() => {
     if (task) {
-      task.then(({ref}) => {
+      task.then(({ ref }) => {
         downloadImage(ref).then(setImgURL);
       });
     }
@@ -53,6 +54,7 @@ export default function ComposeTweet() {
       content: message,
       userId: user.uid,
       userName: user.username,
+      img: imgURL,
     })
       .then(() => {
         router.push('/home');
@@ -90,24 +92,31 @@ export default function ComposeTweet() {
         <Head>
           <title>Crear un Devit / Devter</title>
         </Head>
-        <form onSubmit={handleSubmit}>
-          <textarea
-            onChange={handleChange}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            placeholder='¿Qué esta pasando?'
-          ></textarea>
-          {imgURL && (
-            <section className='remove-img'>
-              <button onClick={() => setImgURL(null)}>x</button>
-              <img src={imgURL} />
+        <section className='form-container'>
+          {user && (
+            <section className='avatar-container'>
+              <Avatar src={user.avatar} />
             </section>
           )}
-          <div>
-            <Button disabled={isButtonDisabled}>Devitear</Button>
-          </div>
-        </form>
+          <form onSubmit={handleSubmit}>
+            <textarea
+              onChange={handleChange}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              placeholder='¿Qué esta pasando?'
+            ></textarea>
+            {imgURL && (
+              <section className='remove-img'>
+                <button onClick={() => setImgURL(null)}>x</button>
+                <img src={imgURL} />
+              </section>
+            )}
+            <div>
+              <Button disabled={isButtonDisabled}>Devitear</Button>
+            </div>
+          </form>
+        </section>
       </AppLayout>
       <style jsx>{`
         div {
