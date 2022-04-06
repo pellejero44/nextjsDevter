@@ -1,17 +1,34 @@
-import { DEFAULT_LANGUAGE } from "constants/locale"
+import { DEFAULT_LANGUAGE } from 'constants/locale';
 
-export default function useDateTimeFormat(timestamp) {
-  const date = new Date(timestamp)
-  const language = DEFAULT_LANGUAGE
+const isDateTimeFormatSupported =
+  typeof Intl !== 'undefined' && Intl.DateTimeFormat;
 
-  const options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
+export const formatDate = (timestamp, { language = DEFAULT_LANGUAGE } = {}) => {
+  const date = new Date(timestamp);
+
+  if (!isDateTimeFormatSupported) {
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+
+    return date.toLocaleDateString(language, options);
   }
 
-  return new Intl.DateTimeFormat(language, options).format(date)
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  };
+
+  return new Intl.DateTimeFormat(language, options).format(date);
+};
+
+export default function useDateTimeFormat(timestamp) {
+  return formatDate(timestamp, { language: DEFAULT_LANGUAGE });
 }
