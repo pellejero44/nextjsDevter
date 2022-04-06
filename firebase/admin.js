@@ -2,7 +2,8 @@ import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 const admin = require('firebase-admin');
 
-const serviceAccount = require('./firebase-keys.json');
+// const serviceAccount = require('./firebase-keys.json');
+const serviceAccount = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CONFIG);
 
 let app;
 try {
